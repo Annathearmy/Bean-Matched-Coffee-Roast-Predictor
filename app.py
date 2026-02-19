@@ -68,8 +68,3 @@ def predict():
     # Show result on new page
     return render_template("result.html", result=prediction_label)
 
-
-# ---------------- RUN SERVER ----------------
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
