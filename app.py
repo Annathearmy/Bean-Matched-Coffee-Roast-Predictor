@@ -13,14 +13,15 @@ app = Flask(__name__)
 MODEL_PATH = "coffee_model.pkl"
 FILE_ID = "1zlISrDAy3SZx4dgR8wIOA_AVbRKOomnZ"
 
-if not os.path.exists(MODEL_PATH):
+if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) < 1000000:
     print("Downloading model from Google Drive...")
-    url = f"https://drive.google.com/uc?id={FILE_ID}"
-    gdown.download(url, MODEL_PATH, quiet=False)
+    url = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
+    gdown.download(url, MODEL_PATH, quiet=False, fuzzy=True)
 
 print("Loading trained model...")
 model = joblib.load(MODEL_PATH)
 print("Model loaded successfully")
+
 # ------------------------------------------------
 
 # Label mapping
