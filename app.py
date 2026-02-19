@@ -3,9 +3,10 @@ import pandas as pd
 import os
 import gdown
 import joblib
+import coffee_py
+import sys
 
-# IMPORTANT: required because pipeline references this class
-from coffee_py import CoffeePostFeatures
+sys.modules['__main__'].CoffeePostFeatures = coffee_py.CoffeePostFeatures
 
 app = Flask(__name__)
 
@@ -68,3 +69,5 @@ def predict():
     # Show result on new page
     return render_template("result.html", result=prediction_label)
 
+# Required for gunicorn
+application = app
