@@ -1,27 +1,27 @@
 from flask import Flask, render_template, request
 import pandas as pd
-import joblib
-
-# IMPORTANT: this must exist because the pipeline uses it internally
-from coffee_py import CoffeePostFeatures
-
 import os
 import gdown
+import joblib
 
-MODEL_PATH = "coffee_model.pkl"
-
-# your google drive direct link here
-MODEL_URL = "https://drive.google.com/file/d/1zlISrDAy3SZx4dgR8wIOA_AVbRKOomnZ/view?usp=sharing"
-
-if not os.path.exists(MODEL_PATH):
-    print("Downloading model...")
-    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
-
+# IMPORTANT: required because pipeline references this class
+from coffee_py import CoffeePostFeatures
 
 app = Flask(__name__)
 
-# Load trained pipeline (preprocessor + feature engineering + model)
-model = joblib.load("coffee_model.pkl")
+# ---------------- MODEL DOWNLOAD ----------------
+MODEL_PATH = "coffee_model.pkl"
+FILE_ID = "1zlISrDAy3SZx4dgR8wIOA_AVbRKOomnZ"
+
+if not os.path.exists(MODEL_PATH):
+    print("Downloading model from Google Drive...")
+    url = f"https://drive.google.com/uc?id={FILE_ID}"
+    gdown.download(url, MODEL_PATH, quiet=False)
+
+print("Loading trained model...")
+model = joblib.load(MODEL_PATH)
+print("Model loaded successfully")
+# ------------------------------------------------
 
 # Label mapping
 label_map = {
@@ -70,4 +70,5 @@ def predict():
 
 # ---------------- RUN SERVER ----------------
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
