@@ -5,6 +5,19 @@ import joblib
 # IMPORTANT: this must exist because the pipeline uses it internally
 from coffee_py import CoffeePostFeatures
 
+import os
+import gdown
+
+MODEL_PATH = "coffee_model.pkl"
+
+# your google drive direct link here
+MODEL_URL = "https://drive.google.com/file/d/1zlISrDAy3SZx4dgR8wIOA_AVbRKOomnZ/view?usp=sharing"
+
+if not os.path.exists(MODEL_PATH):
+    print("Downloading model...")
+    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+
+
 app = Flask(__name__)
 
 # Load trained pipeline (preprocessor + feature engineering + model)
